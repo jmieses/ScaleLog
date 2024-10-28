@@ -43,9 +43,13 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     // RecyclerView dependency
-    implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation(libs.androidx.recyclerview.v121)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
 }
