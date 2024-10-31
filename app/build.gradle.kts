@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -51,5 +52,9 @@ dependencies {
     // RecyclerView dependency
     implementation(libs.androidx.recyclerview.v121)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    // Room Database
+    implementation(libs.androidx.room.runtime.v240)
+    ksp(libs.androidx.room.compiler.v261)
 
 }

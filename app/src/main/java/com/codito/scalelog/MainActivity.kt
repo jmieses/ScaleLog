@@ -13,10 +13,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-//import com.codito.scalelog.data.Weight
-//import com.codito.scalelog.viewmodel.WeightViewModel
-//import com.codito.scalelog.adapter.WeightAdapter
-//import com.codito.scalelog.R
+import com.codito.scalelog.database.Weight
+import com.codito.scalelog.viewmodel.WeightViewModel
+import com.codito.scalelog.adapter.WeightAdapter
+import com.codito.scalelog.R
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +25,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var addButton: Button // Button to add weight to the list
     private lateinit var weightHistoryRecyclerView: RecyclerView // RecyclerView to display weight history
 //    private val weightViewModel: WeightViewModel by viewModels() // ViewModel to manage UI-related data
-//    private lateinit var weightAdapter: WeightAdapter // Adapter for RecyclerView
+    private val weightViewModel: WeightViewModel by lazy { ViewModelProvider(this).get(WeightViewModel::class.java) }
+    private lateinit var weightAdapter: WeightAdapter // Adapter for RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,18 +46,18 @@ class MainActivity : AppCompatActivity() {
         weightHistoryRecyclerView = findViewById(R.id.rv_weight_history) // RecyclerView to display weight history
 
         // Set up RecyclerView to display the weight history
-//        weightAdapter = WeightAdapter() // Initialize the adapter
-//        weightHistoryRecyclerView.layoutManager = LinearLayoutManager(this) // Set layout manager to arrange items vertically
-//        weightHistoryRecyclerView.adapter = weightAdapter // Set the adapter for RecyclerView
+        weightAdapter = WeightAdapter() // Initialize the adapter
+        weightHistoryRecyclerView.layoutManager = LinearLayoutManager(this) // Set layout manager to arrange items vertically
+        weightHistoryRecyclerView.adapter = weightAdapter // Set the adapter for RecyclerView
 
         // Set up button click listener to add weight to the database
         addButton.setOnClickListener {
             val weightText = weightInput.text.toString() // Get the text entered by the user
             if (weightText.isNotEmpty()) { // Check if input is not empty
                 val weight = weightText.toDoubleOrNull() // Try to convert input to a Double
-                if (weight != null) { // If conversion is successful
-//                    val newWeight = Weight(weight = weight) // Create a new Weight object
-//                    weightViewModel.insert(newWeight) // Insert the weight into the database via ViewModel
+                if (weight != null && weight > 0) { // If conversion is successful
+                    val newWeight = Weight(weight = weight) // Create a new Weight object
+                    weightViewModel.insert(newWeight) // Insert the weight into the database via ViewModel
                     weightInput.text.clear() // Clear the input field after successful insertion
                     Toast.makeText(this, "Weight added: $weight lbs", Toast.LENGTH_SHORT).show() // Show confirmation message
                 } else { // If conversion fails
@@ -68,8 +69,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Observe weight data from ViewModel and update RecyclerView when data changes
-//        weightViewModel.allWeights.observe(this, Observer { weights ->
-//            weights?.let { weightAdapter.setWeights(it) } // Update adapter with new weight data
-//        })
+        weightViewModel.allWeights.observe(this, Observer { weights ->
+            weights?.let { weightAdapter.setWeights(it) } // Update adapter with new weight data
+        })
     }
 }
